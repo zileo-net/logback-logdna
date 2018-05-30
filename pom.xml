@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xmlns="http://maven.apache.org/POM/4.0.0"
+ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+ <modelVersion>4.0.0</modelVersion>
+
+ <artifactId>logback-logdna</artifactId>
+ <packaging>jar</packaging>
+ <groupId>net.zileo</groupId>
+ <version>1.0.0-SNAPSHOT</version>
+ <url>https://zileo.net</url>
+
+ <dependencies>
+  <dependency>
+   <groupId>ch.qos.logback</groupId>
+   <artifactId>logback-classic</artifactId>
+   <version>1.2.3</version>
+  </dependency>
+  <dependency>
+   <groupId>org.glassfish.jersey.core</groupId>
+   <artifactId>jersey-client</artifactId>
+   <version>2.25.1</version>
+  </dependency>
+  <dependency>
+   <groupId>com.fasterxml.jackson.jaxrs</groupId>
+   <artifactId>jackson-jaxrs-json-provider</artifactId>
+   <version>2.9.2</version>
+  </dependency>
+  <dependency>
+   <groupId>junit</groupId>
+   <artifactId>junit</artifactId>
+   <version>4.12</version>
+   <scope>test</scope>
+  </dependency>
+ </dependencies>
+</project>
