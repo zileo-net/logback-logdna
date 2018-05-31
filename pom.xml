@@ -1,12 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
  <modelVersion>4.0.0</modelVersion>
 
  <artifactId>logback-logdna</artifactId>
  <packaging>jar</packaging>
  <groupId>net.zileo</groupId>
  <version>1.0.1-SNAPSHOT</version>
- <url>https://zileo.net</url>
+ <name>${project.groupId}:${project.artifactId}</name>
+ <description>Logback appender for sending logs to LogDNA.com</description>
+ <url>https://github.com/zileo-net/logback-logdna</url>
+
+ <licenses>
+  <license>
+   <name>MIT License</name>
+   <url>http://www.opensource.org/licenses/mit-license.php</url>
+  </license>
+ </licenses>
+
+ <developers>
+  <developer>
+   <name>Jonathan Lannoy</name>
+   <email>jonathan@zileo.net</email>
+   <organization>Zileo</organization>
+   <organizationUrl>https://zileo.net</organizationUrl>
+  </developer>
+ </developers>
 
  <scm>
   <connection>scm:git:https://github.com/zileo-net/logback-logdna.git</connection>
