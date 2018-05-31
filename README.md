@@ -4,7 +4,13 @@ This library provides an appender for [logback](https://logback.qos.ch), allowin
 
 ## How to use it
 
-First, copy this dependency into your `pom.xml` file (if your using Maven).
+First, copy this dependency into your `pom.xml` file.
+
+    <dependency>
+        <groupId>net.zileo</groupId>
+        <artifactId>logback-logdna</artifactId>
+        <version>1.0.1</version>
+    </dependency>
 
 Note that this library relies on Jersey JAX-RS implementation with Jackson JSON mapper. For a lightweight implementation, you can check [this other appender](https://github.com/robshep/logback-logdna).
 
@@ -50,3 +56,14 @@ This configuration is based on an [asynchronous wrapper](https://logback.qos.ch/
 ## Configuration options
 
 * You can use your own pattern.
+* Set up your LOGDNA_INGEST_KEY (api key) via the System properties.
+* Set up the LOGDNA_INGEST_URL (api url) the same way. (Should be https://logs.logdna.com/logs/ingest)
+* Set up comma-separated tags if you want to.
+* Set up comma-separated MDC keys to index (from the MDC thread local binding).
+* Set up one type for each MDC key.
+
+Possible types are string, boolean, int and long. The last two result in an indexed number in your LogDNA console, which is rather interesting, as it will allow you some functions inside your graphs (sum, average, etc...).
+
+---
+
+Proudly provided by [Zileo.net](https://zileo.net)
