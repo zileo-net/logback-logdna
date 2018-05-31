@@ -30,6 +30,8 @@ import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.core.UnsynchronizedAppenderBase;
 
 /**
+ * Logback appender for sending logs to <a href="https://logdna.com">LogDNA.com</a>.
+ * 
  * @author jlannoy
  */
 public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
@@ -48,17 +50,17 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
 
     // Assignable fields
 
-    PatternLayoutEncoder encoder;
+    protected PatternLayoutEncoder encoder;
 
-    String appName;
+    protected String appName;
 
-    String ingestUrl = "https://logs.logdna.com/logs/ingest";
+    protected String ingestUrl = "https://logs.logdna.com/logs/ingest";
 
-    List<String> mdcFields = new ArrayList<String>();
+    protected List<String> mdcFields = new ArrayList<String>();
 
-    List<String> mdcTypes = new ArrayList<String>();
+    protected List<String> mdcTypes = new ArrayList<String>();
 
-    String tags;
+    protected String tags;
 
     /**
      * Appender initialization.
@@ -86,6 +88,9 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
         }
     }
 
+    /**
+     * @see ch.qos.logback.core.UnsynchronizedAppenderBase#append(java.lang.Object)
+     */
     @Override
     protected void append(ILoggingEvent event) {
 
@@ -114,6 +119,13 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
 
     }
 
+    /**
+     * Converts a logback logging event to a JSON oriented map.
+     * 
+     * @param event
+     *            the logging event
+     * @return a json oriented map
+     */
     @SuppressWarnings("unchecked")
     protected Map<String, Object> buildPostData(ILoggingEvent event) {
         Map<String, Object> line = new HashMap<String, Object>();
@@ -165,6 +177,7 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
      * Sets the application name for LogDNA indexation.
      * 
      * @param appName
+     *            application name
      */
     public void setAppName(String appName) {
         this.appName = appName;
@@ -174,6 +187,7 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
      * Sets the LogDNA ingest API url.
      * 
      * @param ingestUrl
+     *            logdna url
      */
     public void setIngestUrl(String ingestUrl) {
         this.ingestUrl = ingestUrl;
@@ -182,16 +196,18 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
     /**
      * Sets your LogDNA ingest API key.
      * 
-     * @param apiKey
+     * @param ingestKey
+     *            your ingest key
      */
-    public void setIngestKey(String apiKey) {
-        this.headers.add("apikey", apiKey);
+    public void setIngestKey(String ingestKey) {
+        this.headers.add("apikey", ingestKey);
     }
 
     /**
      * Sets the MDC fields that needs to be sent inside LogDNA metadata, separated by a comma.
      * 
      * @param mdcFields
+     *            MDC fields to use
      */
     public void setMdcFields(String mdcFields) {
         this.mdcFields = Arrays.asList(mdcFields.split(","));
@@ -199,9 +215,11 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
 
     /**
      * Sets the MDC fields types that will be sent inside LogDNA metadata, in the same order as <i>mdcFields</i> are set
-     * up, separated by a comma.
+     * up, separated by a comma. Possible values are <i>string</i>, <i>boolean</i>, <i>int</i> and <i>long</i>. The last
+     * two will result as an indexed <i>number</i> in LogDNA's console.
      * 
      * @param mdcTypes
+     *            MDC fields types
      */
     public void setMdcTypes(String mdcTypes) {
         this.mdcTypes = Arrays.asList(mdcTypes.split(","));
@@ -211,6 +229,7 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
      * Sets the tags that needs to be sent to LogDNA, for grouping hosts for example.
      * 
      * @param tags
+     *            fixed tags
      */
     public void setTags(String tags) {
         this.tags = tags;

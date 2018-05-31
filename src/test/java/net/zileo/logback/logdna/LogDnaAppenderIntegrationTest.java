@@ -30,6 +30,17 @@ public class LogDnaAppenderIntegrationTest {
     }
 
     @Test
+    public void testWarnLog() throws InterruptedException {
+        MDC.put("requestId", "testWarnLog");
+        MDC.put("requestTime", "666");
+
+        Logger logger = LoggerFactory.getLogger(LogDnaAppenderIntegrationTest.class);
+        logger.info("I AM groot");
+
+        Thread.sleep(2000);
+    }
+    
+    @Test
     public void testErrorLog() throws InterruptedException {
         MDC.put("requestId", "testErrorLog");
         MDC.put("requestTime", "789");

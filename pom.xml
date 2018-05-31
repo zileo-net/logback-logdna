@@ -10,6 +10,27 @@
  <version>1.0.0-SNAPSHOT</version>
  <url>https://zileo.net</url>
 
+ <scm>
+  <connection>scm:git:https://github.com/zileo-net/logback-logdna.git</connection>
+  <developerConnection>scm:git:git@github.com:zileo-net/logback-logdna.git</developerConnection>
+  <url>https://github.com/zileo-net/logback-logdna</url>
+  <tag>HEAD</tag>
+ </scm>
+
+ <build>
+  <plugins>
+   <plugin>
+    <artifactId>maven-release-plugin</artifactId>
+    <version>2.4.1</version>
+    <configuration>
+     <useReleaseProfile>false</useReleaseProfile>
+     <releaseProfiles>release</releaseProfiles>
+     <autoVersionSubmodules>true</autoVersionSubmodules>
+    </configuration>
+   </plugin>
+  </plugins>
+ </build>
+
  <dependencies>
   <dependency>
    <groupId>ch.qos.logback</groupId>
@@ -33,4 +54,43 @@
    <scope>test</scope>
   </dependency>
  </dependencies>
+
+ <distributionManagement>
+  <repository>
+   <id>bintray-zileo-net-java</id>
+   <url>https://api.bintray.com/maven/zileo-net/java/logback-logdna</url>
+  </repository>
+ </distributionManagement>
+
+ <profiles>
+  <profile>
+   <id>release</id>
+   <build>
+    <plugins>
+     <plugin>
+      <artifactId>maven-source-plugin</artifactId>
+      <executions>
+       <execution>
+        <id>attach-sources</id>
+        <goals>
+         <goal>jar</goal>
+        </goals>
+       </execution>
+      </executions>
+     </plugin>
+     <plugin>
+      <artifactId>maven-javadoc-plugin</artifactId>
+      <executions>
+       <execution>
+        <id>attach-javadocs</id>
+        <goals>
+         <goal>jar</goal>
+        </goals>
+       </execution>
+      </executions>
+     </plugin>
+    </plugins>
+   </build>
+  </profile>
+ </profiles>
 </project>
