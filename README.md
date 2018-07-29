@@ -34,8 +34,9 @@ Copy the following two LogDna appenders to your `classpath:/logback.xml` file.
         <appender name="LogDna" class="ch.qos.logback.classic.AsyncAppender">
             <appender-ref ref="LogDnaHttp" />
             <queueSize>500</queueSize>
-            <discardingThreshold>0</discardingThreshold>
+            <discardingThreshold>50</discardingThreshold>
             <includeCallerData>false</includeCallerData>
+            <neverBlock>true</neverBlock>
         </appender>
     
         <appender name="Console" class="ch.qos.logback.core.ConsoleAppender">
