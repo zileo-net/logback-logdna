@@ -3,7 +3,7 @@
 
  <appender name="LogDnaHttp" class="net.zileo.logback.logdna.LogDnaAppender">
   <encoder>
-   <pattern[%thread] %msg%n</pattern>
+   <pattern>[%thread] %msg%n</pattern>
   </encoder>
   <appName>LogDnaTest</appName>
   <ingestUrl>${LOGDNA_INGEST_URL}</ingestUrl>
