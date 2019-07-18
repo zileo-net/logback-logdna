@@ -12,6 +12,7 @@ import java.util.Map.Entry;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.client.Entity;
+import javax.ws.rs.client.WebTarget;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.MultivaluedHashMap;
 import javax.ws.rs.core.MultivaluedMap;
@@ -62,6 +63,8 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
 
     protected String tags;
 
+    boolean useTimeDrift = true;
+
     /**
      * Appender initialization.
      */
@@ -101,11 +104,13 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
         try {
             String jsonData = this.mapper.writeValueAsString(buildPostData(event));
 
-            Response response = client.target(ingestUrl) //
+            WebTarget wt = client.target(ingestUrl) //
                     .queryParam("hostname", this.hostname) //
-                    .queryParam("now", System.currentTimeMillis()) //
-                    .queryParam("tags", tags) //
-                    .request().headers(headers).post(Entity.json(jsonData));
+                    .queryParam("tags", tags); //
+            if (useTimeDrift) {
+                wt = wt.queryParam("now", System.currentTimeMillis()); //
+            }
+            Response response = wt.request().headers(headers).post(Entity.json(jsonData));
 
             if (response.getStatus() != 200) {
                 errorLog.error("Error calling LogDna : {} ({})", response.readEntity(String.class), response.getStatus());
@@ -233,6 +238,20 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
      */
     public void setTags(String tags) {
         this.tags = tags;
+    }
+
+    /**
+     * Set whether using time drift. If set true, now parameter is
+     * supplied(https://docs.logdna.com/reference).
+     *
+     * @param useTimeDrift true: Use time drift. false: Do not use time drift.
+     */
+    public void setUseTimeDrift(String useTimeDrift) {
+        if (useTimeDrift.toLowerCase().equals("false")) {
+            this.useTimeDrift = false;
+        } else {
+            this.useTimeDrift = true;
+        }
     }
 
 }
