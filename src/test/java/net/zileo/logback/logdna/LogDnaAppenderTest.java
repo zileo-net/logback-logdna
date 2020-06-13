@@ -1,10 +1,5 @@
 package net.zileo.logback.logdna;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotNull;
-import static org.junit.Assert.assertNull;
-import static org.junit.Assert.assertTrue;
-
 import java.util.Collection;
 import java.util.Map;
 
@@ -16,6 +11,8 @@ import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.spi.ILoggingEvent;
 import ch.qos.logback.classic.spi.LoggingEvent;
+
+import static org.junit.Assert.*;
 
 public class LogDnaAppenderTest {
 
@@ -40,6 +37,11 @@ public class LogDnaAppenderTest {
         appender.setAppName("LogDnaTest");
         appender.setMdcFields("field1,field3,field4,field5");
         appender.setMdcTypes("string,int,boolean,long");
+        assertTrue(appender.useTimeDrift);
+        appender.setUseTimeDrift("false");
+        assertFalse(appender.useTimeDrift);
+        appender.setUseTimeDrift("true");
+        assertTrue(appender.useTimeDrift);
 
         // Build up future-JSON data
         Map<String, Object> postData = appender.buildPostData(ev);

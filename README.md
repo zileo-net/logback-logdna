@@ -29,6 +29,7 @@ Copy the following two LogDna appenders to your `classpath:/logback.xml` file.
             <mdcFields>field1,field2</mdcFields>
             <mdcTypes>string,int</mdcTypes>
             <tags>dev</tags>
+            <useTimeDrift>true</useTimeDrift>
         </appender>
         
         <appender name="LogDna" class="ch.qos.logback.classic.AsyncAppender">
@@ -62,6 +63,7 @@ This configuration is based on an [asynchronous wrapper](https://logback.qos.ch/
 * Set up comma-separated tags if you want to.
 * Set up comma-separated MDC keys to index (from the MDC thread local binding).
 * Set up one type for each MDC key.
+* If you use time drift (&lt;useTimeDrift&gt;true&lt;/useTimeDrift&gt;), the appender will send 'now' paramter and LogDNA uses this for time drift calculation. In this case, the time stamp shown on your LogDNA dashboard will not as same as the time stamp you sent because of time drift treatment. If you want to see the same time stamp as you post by your appender, specify false(&lt;useTimeDrift&gt;false&lt;/useTimeDrift&gt;). Default value is true. For more information, consult the 'now' parameter of LogDNA REST API (https://docs.logdna.com/reference).
 
 Possible types are string, boolean, int and long. The last two result in an indexed number in your LogDNA console, which is rather interesting, as it will allow you some functions inside your graphs (sum, average, etc...).
 
