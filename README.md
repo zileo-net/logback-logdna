@@ -9,7 +9,7 @@ First, copy this dependency into your `pom.xml` file.
     <dependency>
         <groupId>net.zileo</groupId>
         <artifactId>logback-logdna</artifactId>
-        <version>1.0.1</version>
+        <version>1.0.2</version>
     </dependency>
 
 Note that this library relies on Jersey JAX-RS implementation with Jackson JSON mapper. For a lightweight implementation, you can check [this other appender](https://github.com/robshep/logback-logdna).
