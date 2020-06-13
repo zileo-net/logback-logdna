@@ -7,6 +7,12 @@ import org.slf4j.MDC;
 
 public class LogDnaAppenderIntegrationTest {
 
+    static {
+        // TODO Set up your key to run tests
+        System.setProperty("LOGDNA_INGEST_URL", "https://logs.logdna.com/logs/ingest");
+        System.setProperty("LOGDNA_INGEST_KEY", "");
+    }
+
     @Test
     public void testInfoLog() throws InterruptedException {
         MDC.put("requestId", "testInfoLog");
@@ -39,7 +45,7 @@ public class LogDnaAppenderIntegrationTest {
 
         Thread.sleep(2000);
     }
-    
+
     @Test
     public void testErrorLog() throws InterruptedException {
         MDC.put("requestId", "testErrorLog");
