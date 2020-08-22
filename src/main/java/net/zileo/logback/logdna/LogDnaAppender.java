@@ -128,10 +128,9 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
      * Converts a logback logging event to a JSON oriented map.
      * 
      * @param event
-     *            the logging event
+     *        the logging event
      * @return a json oriented map
      */
-    @SuppressWarnings("unchecked")
     protected Map<String, Object> buildPostData(ILoggingEvent event) {
         Map<String, Object> line = new HashMap<String, Object>();
         line.put("timestamp", event.getTimeStamp());
@@ -182,7 +181,7 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
      * Sets the application name for LogDNA indexation.
      * 
      * @param appName
-     *            application name
+     *        application name
      */
     public void setAppName(String appName) {
         this.appName = appName;
@@ -192,7 +191,7 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
      * Sets the LogDNA ingest API url.
      * 
      * @param ingestUrl
-     *            logdna url
+     *        logdna url
      */
     public void setIngestUrl(String ingestUrl) {
         this.ingestUrl = ingestUrl;
@@ -202,7 +201,7 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
      * Sets your LogDNA ingest API key.
      * 
      * @param ingestKey
-     *            your ingest key
+     *        your ingest key
      */
     public void setIngestKey(String ingestKey) {
         this.headers.add("apikey", ingestKey);
@@ -212,7 +211,7 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
      * Sets the MDC fields that needs to be sent inside LogDNA metadata, separated by a comma.
      * 
      * @param mdcFields
-     *            MDC fields to use
+     *        MDC fields to use
      */
     public void setMdcFields(String mdcFields) {
         this.mdcFields = Arrays.asList(mdcFields.split(","));
@@ -224,7 +223,7 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
      * two will result as an indexed <i>number</i> in LogDNA's console.
      * 
      * @param mdcTypes
-     *            MDC fields types
+     *        MDC fields types
      */
     public void setMdcTypes(String mdcTypes) {
         this.mdcTypes = Arrays.asList(mdcTypes.split(","));
@@ -234,7 +233,7 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
      * Sets the tags that needs to be sent to LogDNA, for grouping hosts for example.
      * 
      * @param tags
-     *            fixed tags
+     *        fixed tags
      */
     public void setTags(String tags) {
         this.tags = tags;
