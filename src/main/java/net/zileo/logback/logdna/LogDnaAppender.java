@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.concurrent.TimeUnit;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -23,6 +24,8 @@ import org.slf4j.LoggerFactory;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.DeserializationFeature;
+import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 
@@ -41,13 +44,13 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
 
     private final Logger errorLog = LoggerFactory.getLogger(LogDnaAppender.class);
 
-    private final MultivaluedMap<String, Object> headers;
-
-    private final Client client;
-
-    private final ObjectMapper mapper;
+    private final ObjectMapper dataMapper, responseMapper;
 
     private final String hostname;
+
+    private Client client;
+
+    protected final MultivaluedMap<String, Object> headers;
 
     // Assignable fields
 
@@ -63,7 +66,9 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
 
     protected String tags;
 
-    boolean useTimeDrift = true;
+    protected long connectTimeout = 0, readTimeout = 0;
+
+    protected boolean useTimeDrift = true;
 
     /**
      * Appender initialization.
@@ -76,11 +81,12 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
         this.headers.add("Accept", MediaType.APPLICATION_JSON);
         this.headers.add("Content-Type", MediaType.APPLICATION_JSON);
 
-        this.client = ClientBuilder.newClient();
+        this.dataMapper = new ObjectMapper();
+        this.dataMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+        this.dataMapper.setPropertyNamingStrategy(PropertyNamingStrategy.UPPER_CAMEL_CASE);
 
-        this.mapper = new ObjectMapper();
-        this.mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        this.mapper.setPropertyNamingStrategy(PropertyNamingStrategy.UPPER_CAMEL_CASE);
+        this.responseMapper = new ObjectMapper();
+        this.responseMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     }
 
     private String identifyHostname() {
@@ -89,6 +95,18 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
         } catch (UnknownHostException e) {
             return "localhost";
         }
+    }
+
+    // Postpone client initialization to allow timeouts configuration
+    protected Client client() {
+        if (this.client == null) {
+            this.client = ClientBuilder.newBuilder() //
+                    .connectTimeout(this.connectTimeout, TimeUnit.MILLISECONDS) //
+                    .readTimeout(this.readTimeout, TimeUnit.MILLISECONDS) //
+                    .build();
+        }
+
+        return this.client;
     }
 
     /**
@@ -102,26 +120,52 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
         }
 
         try {
-            String jsonData = this.mapper.writeValueAsString(buildPostData(event));
+            String jsonData = convertLogEventToJson(event);
 
-            WebTarget wt = client.target(ingestUrl) //
-                    .queryParam("hostname", this.hostname) //
-                    .queryParam("tags", tags); //
-            if (useTimeDrift) {
-                wt = wt.queryParam("now", System.currentTimeMillis()); //
-            }
-            Response response = wt.request().headers(headers).post(Entity.json(jsonData));
+            Response response = callIngestApi(jsonData);
 
             if (response.getStatus() != 200) {
-                errorLog.error("Error calling LogDna : {} ({})", response.readEntity(String.class), response.getStatus());
+                LogDnaResponse logDnaResponse = convertResponseToObject(response);
+                errorLog.error("Error calling LogDna : {} ({})", logDnaResponse.getError(), response.getStatus());
             }
 
         } catch (JsonProcessingException e) {
             errorLog.error("Error processing JSON data : " + e.getMessage(), e);
+
         } catch (Exception e) {
             errorLog.error("Error calling LogDna : " + e.getMessage(), e);
         }
 
+    }
+
+    protected String convertLogEventToJson(ILoggingEvent event) throws JsonProcessingException {
+        return this.dataMapper.writeValueAsString(buildPostData(event));
+    }
+
+    protected LogDnaResponse convertResponseToObject(Response response) throws JsonProcessingException, JsonMappingException {
+        return this.responseMapper.readValue(response.readEntity(String.class), LogDnaResponse.class);
+    }
+
+    /**
+     * Call LogDna API posting given JSON formated string.
+     * 
+     * @param jsonData
+     *        a json oriented map
+     * @return the http response
+     */
+
+    protected Response callIngestApi(String jsonData) {
+        WebTarget wt = client().target(ingestUrl) //
+                .queryParam("hostname", this.hostname) //
+                .queryParam("tags", tags);
+
+        if (useTimeDrift) {
+            wt = wt.queryParam("now", System.currentTimeMillis()); //
+        }
+
+        return wt.request() //
+                .headers(headers) //
+                .post(Entity.json(jsonData));
     }
 
     /**
@@ -241,7 +285,7 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
 
     /**
      * Set whether using time drift. If set true, now parameter is
-     * supplied(https://docs.logdna.com/reference).
+     * supplied (https://docs.logdna.com/reference).
      *
      * @param useTimeDrift true: Use time drift. false: Do not use time drift.
      */
@@ -251,6 +295,24 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
         } else {
             this.useTimeDrift = true;
         }
+    }
+
+    /**
+     * Sets the connection timeout of the underlying HTTP client, in milliseconds.
+     * 
+     * @param connectTimeout
+     */
+    public void setConnectTimeout(Long connectTimeout) {
+        this.connectTimeout = connectTimeout;
+    }
+
+    /**
+     * Sets the read timeout of the underlying HTTP client, in milliseconds.
+     * 
+     * @param readTimeout
+     */
+    public void setReadTimeout(Long readTimeout) {
+        this.readTimeout = readTimeout;
     }
 
 }
