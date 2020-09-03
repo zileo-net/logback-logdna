@@ -25,7 +25,6 @@ import org.slf4j.LoggerFactory;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 
@@ -40,7 +39,7 @@ import ch.qos.logback.core.UnsynchronizedAppenderBase;
  */
 public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
 
-    private final static String CUSTOM_USER_AGENT = "LogDna Logback Appender";
+    private static final String CUSTOM_USER_AGENT = "LogDna Logback Appender";
 
     private final Logger errorLog = LoggerFactory.getLogger(LogDnaAppender.class);
 
@@ -60,9 +59,9 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
 
     protected String ingestUrl = "https://logs.logdna.com/logs/ingest";
 
-    protected List<String> mdcFields = new ArrayList<String>();
+    protected List<String> mdcFields = new ArrayList<>();
 
-    protected List<String> mdcTypes = new ArrayList<String>();
+    protected List<String> mdcTypes = new ArrayList<>();
 
     protected String tags;
 
@@ -76,7 +75,7 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
     public LogDnaAppender() {
         this.hostname = identifyHostname();
 
-        this.headers = new MultivaluedHashMap<String, Object>();
+        this.headers = new MultivaluedHashMap<>();
         this.headers.add("User-Agent", CUSTOM_USER_AGENT);
         this.headers.add("Accept", MediaType.APPLICATION_JSON);
         this.headers.add("Content-Type", MediaType.APPLICATION_JSON);
@@ -130,10 +129,10 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
             }
 
         } catch (JsonProcessingException e) {
-            errorLog.error("Error processing JSON data : " + e.getMessage(), e);
+            errorLog.error("Error processing JSON data : {}", e.getMessage());
 
         } catch (Exception e) {
-            errorLog.error("Error calling LogDna : " + e.getMessage(), e);
+            errorLog.error("Error calling LogDna : {}", e.getMessage());
         }
 
     }
@@ -142,7 +141,7 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
         return this.dataMapper.writeValueAsString(buildPostData(event));
     }
 
-    protected LogDnaResponse convertResponseToObject(Response response) throws JsonProcessingException, JsonMappingException {
+    protected LogDnaResponse convertResponseToObject(Response response) throws JsonProcessingException {
         return this.responseMapper.readValue(response.readEntity(String.class), LogDnaResponse.class);
     }
 
@@ -176,7 +175,7 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
      * @return a json oriented map
      */
     protected Map<String, Object> buildPostData(ILoggingEvent event) {
-        Map<String, Object> line = new HashMap<String, Object>();
+        Map<String, Object> line = new HashMap<>();
         line.put("timestamp", event.getTimeStamp());
         line.put("level", event.getLevel().toString());
         line.put("app", this.appName);
@@ -184,7 +183,7 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
 
         Map<String, Object> meta = new HashMap<String, Object>();
         meta.put("logger", event.getLoggerName());
-        if (mdcFields.size() > 0 && !event.getMDCPropertyMap().isEmpty()) {
+        if (!mdcFields.isEmpty() && !event.getMDCPropertyMap().isEmpty()) {
             for (Entry<String, String> entry : event.getMDCPropertyMap().entrySet()) {
                 if (mdcFields.contains(entry.getKey())) {
                     String type = mdcTypes.get(mdcFields.indexOf(entry.getKey()));
@@ -194,7 +193,7 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
         }
         line.put("meta", meta);
 
-        Map<String, Object> lines = new HashMap<String, Object>();
+        Map<String, Object> lines = new HashMap<>();
         lines.put("lines", Arrays.asList(line));
         return lines;
     }
@@ -211,7 +210,7 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
                 return Boolean.valueOf(value);
             }
         } catch (NumberFormatException e) {
-
+            errorLog.warn("Error getting meta value : {}", e.getMessage());
         }
         return value;
 
@@ -290,7 +289,7 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
      * @param useTimeDrift true: Use time drift. false: Do not use time drift.
      */
     public void setUseTimeDrift(String useTimeDrift) {
-        if (useTimeDrift.toLowerCase().equals("false")) {
+        if (useTimeDrift.equalsIgnoreCase("false")) {
             this.useTimeDrift = false;
         } else {
             this.useTimeDrift = true;
