@@ -40,6 +40,9 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <maven.compiler.source>1.8</maven.compiler.source>
         <gpg.skip>false</gpg.skip>
+        <sonar.projectKey>zileo-net_logback-logdna</sonar.projectKey>
+        <sonar.organization>zileo-net</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
 
     <build>
