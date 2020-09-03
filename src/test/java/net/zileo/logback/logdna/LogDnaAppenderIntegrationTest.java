@@ -2,11 +2,10 @@ package net.zileo.logback.logdna;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import javax.ws.rs.ProcessingException;
-
-import static org.junit.Assert.assertNotNull;
 
 import org.junit.After;
 import org.junit.Before;
