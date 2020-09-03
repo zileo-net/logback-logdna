@@ -1,4 +1,4 @@
-name: Maven Deploy
+name: Maven Release
 on:
    push:
       branches:
@@ -18,7 +18,7 @@ jobs:
          with:
             release-branch-name: release
             gpg-enabled: true
-            gpg-key-id: ${{ ecrets.RELEASE_GPG_KEY_ID}}
+            gpg-key-id: ${{secrets.RELEASE_GPG_KEY_ID}}
             gpg-key: ${{secrets.RELEASE_GPG_KEY}}
             git-release-bot-name: ${{secrets.RELEASE_USER_NAME}}
             git-release-bot-email: ${{secrets.RELEASE_USER_EMAIL}}
