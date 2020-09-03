@@ -17,12 +17,13 @@ jobs:
          uses: qcastel/github-actions-maven-release@master
          with:
             release-branch-name: release
-            git-release-bot-name: ${{ secrets.RELEASE_USER_NAME }}
-            git-release-bot-email: ${{ secrets.RELEASE_USER_EMAIL }}
-            gpg-key-id: ${{ secrets.RELEASE_GPG_KEY_ID }}
-            gpg-key: ${{ secrets.RELEASE_GPG_KEY }}
-            access-token: ${{ secrets.GITHUB_ACCESS_TOKEN }}
+            gpg-enabled: true
+            gpg-key-id: ${{ ecrets.RELEASE_GPG_KEY_ID}}
+            gpg-key: ${{secrets.RELEASE_GPG_KEY}}
+            git-release-bot-name: ${{secrets.RELEASE_USER_NAME}}
+            git-release-bot-email: ${{secrets.RELEASE_USER_EMAIL}}
+            access-token: ${{secrets.GITHUB_ACCESS_TOKEN}}
             maven-repo-server-id: ossrh
-            maven-repo-server-username: ${{ secrets.OSSRH_USERNAME }}
-            maven-repo-server-password: ${{ secrets.OSSRH_PASSWORD }}
-            maven-args: -DskipTests
+            maven-repo-server-username: ${{secrets.OSSRH_USERNAME}}
+            maven-repo-server-password: ${{secrets.OSSRH_PASSWORD}}
+            maven-args: -Prelease -DskipTests -Dgpg.keyname=${{secrets.RELEASE_GPG_KEY_ID}} -Dgpg.passphrase=
