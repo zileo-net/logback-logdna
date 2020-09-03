@@ -43,7 +43,9 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
 
     private final Logger errorLog = LoggerFactory.getLogger(LogDnaAppender.class);
 
-    private final ObjectMapper dataMapper, responseMapper;
+    private final ObjectMapper dataMapper;
+
+    private final ObjectMapper responseMapper;
 
     private final String hostname;
 
@@ -65,7 +67,9 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
 
     protected String tags;
 
-    protected long connectTimeout = 0, readTimeout = 0;
+    protected long connectTimeout = 0;
+
+    protected long readTimeout = 0;
 
     protected boolean useTimeDrift = true;
 
@@ -181,7 +185,7 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
         line.put("app", this.appName);
         line.put("line", this.encoder != null ? new String(this.encoder.encode(event)) : event.getFormattedMessage());
 
-        Map<String, Object> meta = new HashMap<String, Object>();
+        Map<String, Object> meta = new HashMap<>();
         meta.put("logger", event.getLoggerName());
         if (!mdcFields.isEmpty() && !event.getMDCPropertyMap().isEmpty()) {
             for (Entry<String, String> entry : event.getMDCPropertyMap().entrySet()) {

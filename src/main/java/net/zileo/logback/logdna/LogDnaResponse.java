@@ -7,7 +7,11 @@ package net.zileo.logback.logdna;
  */
 public class LogDnaResponse {
 
-    private String error, code, status;
+    private String error;
+
+    private String code;
+
+    private String status;
 
     public String getError() {
         return error;
