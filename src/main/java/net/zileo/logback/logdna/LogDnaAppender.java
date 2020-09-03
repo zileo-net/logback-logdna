@@ -303,7 +303,7 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
     /**
      * Sets the connection timeout of the underlying HTTP client, in milliseconds.
      * 
-     * @param connectTimeout
+     * @param connectTimeout client connection timeout
      */
     public void setConnectTimeout(Long connectTimeout) {
         this.connectTimeout = connectTimeout;
@@ -312,7 +312,7 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
     /**
      * Sets the read timeout of the underlying HTTP client, in milliseconds.
      * 
-     * @param readTimeout
+     * @param readTimeout client read timeout
      */
     public void setReadTimeout(Long readTimeout) {
         this.readTimeout = readTimeout;
