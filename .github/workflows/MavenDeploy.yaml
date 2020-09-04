@@ -1,0 +1,24 @@
+name: Maven Deploy Release
+on:
+   release:
+      types:
+      - created
+jobs:
+   release:
+      runs-on: ubuntu-18.04
+      steps:
+      -  name: Check out Git repository
+         uses: actions/checkout@v2
+      -  name: Install Java and Maven
+         uses: actions/setup-java@v1
+         with:
+            java-version: 11
+      -  name: Update project version
+         run: mvn -B versions:set -DnewVersion=${{ github.event.release.tag_name }} -DgenerateBackupPoms=false
+      -  name: Release Maven package
+         uses: samuelmeuli/action-maven-publish@v1
+         with:
+            gpg_private_key: ${{ secrets.RELEASE_GPG_KEY }}
+            gpg_passphrase: ''
+            nexus_username: ${{ secrets.OSSRH_USERNAME }}
+            nexus_password: ${{ secrets.OSSRH_PASSWORD }}
