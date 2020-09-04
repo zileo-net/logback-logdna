@@ -43,6 +43,8 @@
         <sonar.projectKey>zileo-net_logback-logdna</sonar.projectKey>
         <sonar.organization>zileo-net</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
     </properties>
 
     <build>
