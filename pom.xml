@@ -163,8 +163,10 @@
                         <artifactId>maven-javadoc-plugin</artifactId>
                         <version>3.2.0</version>
                         <configuration>
-                            <additionalparam>-Xdoclint:none</additionalparam>
                             <source>11</source>
+                            <additionalparam>-Xdoclint:none</additionalparam>
+                            <linksource>true</linksource>
+                            <detectJavaApiLink>true</detectJavaApiLink>
                         </configuration>
                         <executions>
                             <execution>
