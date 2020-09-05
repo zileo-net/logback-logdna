@@ -1,10 +1,7 @@
-name: Maven Release
-on:
-   push:
-      branches:
-      - release
+name: Maven Release & Deploy
+on: workflow_dispatch
 jobs:
-   publish:
+   release:
       runs-on: ubuntu-latest
       steps:
       -  name: Checkout project
@@ -13,10 +10,10 @@ jobs:
          uses: actions/setup-java@v1
          with:
             java-version: 11
-      -  name: Release
+      -  name: Release & Deploy
          uses: qcastel/github-actions-maven-release@master
          with:
-            release-branch-name: release
+            release-branch-name: master
             gpg-enabled: true
             gpg-key-id: ${{secrets.RELEASE_GPG_KEY_ID}}
             gpg-key: ${{secrets.RELEASE_GPG_KEY}}
