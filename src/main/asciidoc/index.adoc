@@ -1,11 +1,47 @@
 = Logback-LogDNA Manual
-
-:revnumber: {project-version}
-ifndef::imagesdir[:imagesdir: images]
-ifndef::sourcedir[:sourcedir: ../java]
-
-This is a user manual for an example project.
+ifndef::sourcedir[:sourcedir: ../../test/resources]
 
 == Introduction
 
-This project does something. We just haven't decided what that is yet.
+This library provides an appender for https://logback.qos.ch[logback], allowing you to send logs to the https://logdna.com[LogDNA] online logging platform, via their HTTPS Ingest API. MDC thread-bound data can be send, indexed and searched into your LogDNA dashboard.
+
+This library relies on a JAX-RS implementation (of your choice) with a Jackson JSON mapper. For a lightweight implementation, you can check https://github.com/robshep/logback-logdna[this other appender].
+
+== How to use it
+
+First, copy this dependency into your `pom.xml` file.
+
+[source,xml,subs="attributes+"]
+----
+<dependency>
+    <groupId>net.zileo</groupId>
+    <artifactId>logback-logdna</artifactId>
+    <version>{revnumber}</version>
+</dependency>
+----
+
+If you don't already have one in your project, add a JAX-RS implementation into your `pom.xml`, like https://search.maven.org/artifact/org.glassfish.jersey.core/jersey-client[Jersey] (the one used in the unit tests), https://search.maven.org/artifact/org.jboss.resteasy/resteasy-client[RESTEasy] or https://search.maven.org/artifact/org.apache.cxf/cxf-rt-rs-client[Apache CXF].
+
+Then, copy the following two LogDna appenders to your `classpath:/logback.xml` file. Check the next chapter for a description of each configuration option.
+
+[source,xml,indent=0]
+----
+include::{sourcedir}/logback-prod.xml[]
+----
+    
+TIP: This configuration is based on an https://logback.qos.ch/manual/appenders.html#AsyncAppender[asynchronous wrapper], for performance reason. Check https://blog.takipi.com/how-to-instantly-improve-your-java-logging-with-7-logback-tweaks/[this nice OverOps blog article] for more information.
+    
+Finally, you have to provide a `LOGDNA_INGEST_KEY` (api key you'll create in your LogDNA console) and the `LOGDNA_INGEST_URL` (should be https://logs.logdna.com/logs/ingest) via your System properties or environment variables.
+    
+== Configuration options
+
+* You can use your own logging pattern.
+* Set up comma-separated tags if you want to.
+* Set up comma-separated MDC keys to index (from the MDC thread local binding).
+* Set up one type for each MDC key. Possible types are string, boolean, int and long. The last two result in an indexed number in your LogDNA console, which is rather interesting, as it will allow you some functions inside your graphs (sum, average, etc...).
+* If you use time drift (`<useTimeDrift>true</useTimeDrift>`), the appender will send a `now` parameter being the source UNIX timestamp. In this case, the time stamp shown on your LogDNA dashboard will not be the same as the time stamp you sent because of time drift treatment. If you want to see the same time stamp as you post by your appender, specify false (`<useTimeDrift>false</useTimeDrift>`). Default value is true. For more information, consult the https://docs.logdna.com/reference[API reference].
+* You can also set up a specific `connectTimeout` and `readTimeout` for the underlying JAX-RS client.
+
+== JSON parameters parsing
+
+A nice feature of LogDNA is the ability to parse a JSON object at the end of your log message. For example, if you log the following message : `My message { id: 1, value: 'text' }`, then LogDNA will index both and id and a value _searchable_ parameters. Check https://docs.logdna.com/docs/ingestion[LogDNA's documentation] for more information.

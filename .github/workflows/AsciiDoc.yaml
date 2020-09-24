@@ -1,0 +1,41 @@
+name: Publish Ascii Doc
+on: workflow_dispatch
+jobs:
+   release:
+      runs-on: ubuntu-latest
+      steps:
+      -  name: Checkout project
+         uses: actions/checkout@v2
+         with:
+            fetch-depth: 0
+      -  name: Set up JDK
+         uses: actions/setup-java@v1
+         with:
+            java-version: 11
+      -  name: Cache SonarCloud packages
+         uses: actions/cache@v1
+         with:
+            path: ~/.sonar/cache
+            key: ${{ runner.os }}-sonar
+            restore-keys: ${{ runner.os }}-sonar
+      -  name: Cache Maven packages
+         uses: actions/cache@v1
+         with:
+            path: ~/.m2
+            key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
+            restore-keys: ${{ runner.os }}-m2
+      -  name: Build with Maven
+         run: mvn -B clean package org.sonarsource.scanner.maven:sonar-maven-plugin:sonar --file pom.xml
+         env:
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # Needed to get PR information, if any
+            SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+            LOGDNA_INGEST_KEY: ${{ secrets.LOGDNA_INGEST_KEY }}
+            LOGDNA_INGEST_URL: ${{ secrets.LOGDNA_INGEST_URL }}
+      -  name: Deploy to GitHub Pages
+         if: success()
+         uses: crazy-max/ghaction-github-pages@v2
+         with:
+            target_branch: gh-pages
+            build_dir: target/generated-docs
+         env:
+            GITHUB_TOKEN: ${{ secrets.RELEASE_GITHUB_TOKEN }}
