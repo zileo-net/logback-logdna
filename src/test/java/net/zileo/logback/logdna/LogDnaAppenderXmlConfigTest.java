@@ -57,6 +57,9 @@ public class LogDnaAppenderXmlConfigTest {
         assertEquals(5000, appender.connectTimeout);
         assertEquals(10000, appender.readTimeout);
 
+        assertEquals(false, appender.useTimeDrift);
+        assertEquals("my-host", appender.hostname);
+        
         rootLogger.info("I am Groot");
     }
 

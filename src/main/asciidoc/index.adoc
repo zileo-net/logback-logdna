@@ -40,7 +40,8 @@ Finally, you have to provide a `LOGDNA_INGEST_KEY` (api key you'll create in you
 * Set up comma-separated MDC keys to index (from the MDC thread local binding).
 * Set up one type for each MDC key. Possible types are string, boolean, int and long. The last two result in an indexed number in your LogDNA console, which is rather interesting, as it will allow you some functions inside your graphs (sum, average, etc...).
 * If you use time drift (`<useTimeDrift>true</useTimeDrift>`), the appender will send a `now` parameter being the source UNIX timestamp. In this case, the time stamp shown on your LogDNA dashboard will not be the same as the time stamp you sent because of time drift treatment. If you want to see the same time stamp as you post by your appender, specify false (`<useTimeDrift>false</useTimeDrift>`). Default value is true. For more information, consult the https://docs.logdna.com/reference[API reference].
-* You can also set up a specific `connectTimeout` and `readTimeout` for the underlying JAX-RS client.
+* You can try to set up a specific `connectTimeout` and `readTimeout` for the underlying JAX-RS client.
+* Although there is an automated lookup for it, you can force a specific value for the `hostname` that will be given to LogDNA. It will appear in the `Source` metadata field.
 
 == JSON parameters parsing
 

@@ -26,7 +26,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.PropertyNamingStrategy;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 
 import ch.qos.logback.classic.encoder.PatternLayoutEncoder;
 import ch.qos.logback.classic.spi.ILoggingEvent;
@@ -47,13 +47,13 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
 
     private final ObjectMapper responseMapper;
 
-    private final String hostname;
-
     private Client client;
 
     protected final MultivaluedMap<String, Object> headers;
 
     // Assignable fields
+
+    protected String hostname;
 
     protected PatternLayoutEncoder encoder;
 
@@ -77,8 +77,6 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
      * Appender initialization.
      */
     public LogDnaAppender() {
-        this.hostname = identifyHostname();
-
         this.headers = new MultivaluedHashMap<>();
         this.headers.add("User-Agent", CUSTOM_USER_AGENT);
         this.headers.add("Accept", MediaType.APPLICATION_JSON);
@@ -86,7 +84,7 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
 
         this.dataMapper = new ObjectMapper();
         this.dataMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-        this.dataMapper.setPropertyNamingStrategy(PropertyNamingStrategy.UPPER_CAMEL_CASE);
+        this.dataMapper.setPropertyNamingStrategy(PropertyNamingStrategies.UPPER_CAMEL_CASE);
 
         this.responseMapper = new ObjectMapper();
         this.responseMapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
@@ -103,6 +101,11 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
     // Postpone client initialization to allow timeouts configuration
     protected Client client() {
         if (this.client == null) {
+
+            if (this.hostname == null) {
+                this.hostname = identifyHostname();
+            }
+
             this.client = ClientBuilder.newBuilder() //
                     .connectTimeout(this.connectTimeout, TimeUnit.MILLISECONDS) //
                     .readTimeout(this.readTimeout, TimeUnit.MILLISECONDS) //
@@ -153,7 +156,7 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
      * Call LogDna API posting given JSON formated string.
      * 
      * @param jsonData
-     *        a json oriented map
+     *            a json oriented map
      * @return the http response
      */
 
@@ -163,7 +166,7 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
                 .queryParam("tags", tags);
 
         if (useTimeDrift) {
-            wt = wt.queryParam("now", System.currentTimeMillis()); //
+            wt = wt.queryParam("now", System.currentTimeMillis());
         }
 
         return wt.request() //
@@ -175,7 +178,7 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
      * Converts a logback logging event to a JSON oriented map.
      * 
      * @param event
-     *        the logging event
+     *            the logging event
      * @return a json oriented map
      */
     protected Map<String, Object> buildPostData(ILoggingEvent event) {
@@ -228,7 +231,7 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
      * Sets the application name for LogDNA indexation.
      * 
      * @param appName
-     *        application name
+     *            application name
      */
     public void setAppName(String appName) {
         this.appName = appName;
@@ -238,7 +241,7 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
      * Sets the LogDNA ingest API url.
      * 
      * @param ingestUrl
-     *        logdna url
+     *            logdna url
      */
     public void setIngestUrl(String ingestUrl) {
         this.ingestUrl = ingestUrl;
@@ -248,7 +251,7 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
      * Sets your LogDNA ingest API key.
      * 
      * @param ingestKey
-     *        your ingest key
+     *            your ingest key
      */
     public void setIngestKey(String ingestKey) {
         this.headers.add("apikey", ingestKey);
@@ -258,7 +261,7 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
      * Sets the MDC fields that needs to be sent inside LogDNA metadata, separated by a comma.
      * 
      * @param mdcFields
-     *        MDC fields to use
+     *            MDC fields to use
      */
     public void setMdcFields(String mdcFields) {
         this.mdcFields = Arrays.asList(mdcFields.split(","));
@@ -270,7 +273,7 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
      * two will result as an indexed <i>number</i> in LogDNA's console.
      * 
      * @param mdcTypes
-     *        MDC fields types
+     *            MDC fields types
      */
     public void setMdcTypes(String mdcTypes) {
         this.mdcTypes = Arrays.asList(mdcTypes.split(","));
@@ -280,30 +283,37 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
      * Sets the tags that needs to be sent to LogDNA, for grouping hosts for example.
      * 
      * @param tags
-     *        fixed tags
+     *            fixed tags
      */
     public void setTags(String tags) {
         this.tags = tags;
     }
 
     /**
-     * Set whether using time drift. If set true, now parameter is
-     * supplied (https://docs.logdna.com/reference).
+     * Set whether using time drift. If set true, now parameter is supplied (https://docs.logdna.com/reference).
      *
-     * @param useTimeDrift true: Use time drift. false: Do not use time drift.
+     * @param useTimeDrift
+     *            true: Use time drift. false: Do not use time drift.
      */
     public void setUseTimeDrift(String useTimeDrift) {
-        if (useTimeDrift.equalsIgnoreCase("false")) {
-            this.useTimeDrift = false;
-        } else {
-            this.useTimeDrift = true;
-        }
+        this.useTimeDrift = !useTimeDrift.equalsIgnoreCase("false");
+    }
+
+    /**
+     * Force a given value for the hostname LogDNA parameter.
+     *
+     * @param hostname
+     *            local hostname value
+     */
+    public void setHostname(String hostname) {
+        this.hostname = hostname;
     }
 
     /**
      * Sets the connection timeout of the underlying HTTP client, in milliseconds.
      * 
-     * @param connectTimeout client connection timeout
+     * @param connectTimeout
+     *            client connection timeout
      */
     public void setConnectTimeout(Long connectTimeout) {
         this.connectTimeout = connectTimeout;
@@ -312,7 +322,8 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
     /**
      * Sets the read timeout of the underlying HTTP client, in milliseconds.
      * 
-     * @param readTimeout client read timeout
+     * @param readTimeout
+     *            client read timeout
      */
     public void setReadTimeout(Long readTimeout) {
         this.readTimeout = readTimeout;

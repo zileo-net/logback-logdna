@@ -13,6 +13,8 @@
         <tags>dev</tags>
         <connectTimeout>5000</connectTimeout>
         <readTimeout>10000</readTimeout>
+        <useTimeDrift>false</useTimeDrift>
+        <hostname>my-host</hostname>
     </appender>
 
     <appender name="LogDna" class="ch.qos.logback.classic.AsyncAppender">
