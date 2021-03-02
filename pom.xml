@@ -9,7 +9,7 @@
 
     <name>${project.groupId}:${project.artifactId}</name>
     <description>Logback appender for sending logs to LogDNA.com</description>
-    <url>https://github.com/zileo-net/logback-logdna</url>
+    <url>https://zileo-net.github.io/logback-logdna/</url>
 
     <licenses>
         <license>
