@@ -11,7 +11,7 @@ jobs:
          with:
             java-version: 8
       -  name: Release & Deploy
-         uses: qcastel/github-actions-maven-release@master
+         uses: qcastel/github-actions-maven-release@v1.11.2
          with:
             release-branch-name: master
             gpg-enabled: true
