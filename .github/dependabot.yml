@@ -1,0 +1,18 @@
+version: 2
+updates:
+- package-ecosystem: maven
+  directory: "/"
+  schedule:
+    interval: monthly
+    time: "04:00"
+  open-pull-requests-limit: 10
+  ignore:
+  - dependency-name: org.glassfish.jersey.inject:jersey-hk2
+    versions:
+    - 3.0.0
+  - dependency-name: org.glassfish.jersey.core:jersey-client
+    versions:
+    - 3.0.0
+  - dependency-name: com.fasterxml.jackson.jaxrs:jackson-jaxrs-json-provider
+    versions:
+    - 2.12.0
