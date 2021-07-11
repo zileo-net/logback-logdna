@@ -131,7 +131,7 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
             return;
         }
 
-        if (!this.headers.containsKey("apikey") || this.headers.getFirst("apikey").toString().isBlank()) {
+        if (!this.headers.containsKey("apikey") || this.headers.getFirst("apikey").toString().trim().length() == 0) {
             errorLog.warn("Empty ingest API key for LogDNA ; disabling LogDnaAppender");
             this.disabled = true;
             return;
