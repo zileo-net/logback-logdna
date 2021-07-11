@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+
+    <appender name="LogDnaHttp" class="net.zileo.logback.logdna.LogDnaAppender">
+        <encoder>
+            <pattern>[%thread] %msg%n</pattern>
+        </encoder>
+        <appName>LogDnaTest</appName>
+        <ingestUrl></ingestUrl>
+        <ingestKey></ingestKey>
+        <mdcFields>requestId,requestTime</mdcFields>
+        <mdcTypes>string,int</mdcTypes>
+        <tags>dev</tags>
+        <connectTimeout>5000</connectTimeout>
+        <readTimeout>10000</readTimeout>
+        <useTimeDrift>false</useTimeDrift>
+        <hostname>my-host</hostname>
+    </appender>
+
+    <root level="INFO">
+        <appender-ref ref="LogDnaHttp" />
+    </root>
+
+</configuration>

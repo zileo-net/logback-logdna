@@ -31,7 +31,7 @@ include::{sourcedir}/logback-prod.xml[]
     
 TIP: This configuration is based on an https://logback.qos.ch/manual/appenders.html#AsyncAppender[asynchronous wrapper], for performance reason. Check https://blog.takipi.com/how-to-instantly-improve-your-java-logging-with-7-logback-tweaks/[this nice OverOps blog article] for more information.
     
-Finally, you have to provide a `LOGDNA_INGEST_KEY` (api key you'll create in your LogDNA console) and the `LOGDNA_INGEST_URL` (should be https://logs.logdna.com/logs/ingest) via your System properties or environment variables.
+Finally, you have to provide a `LOGDNA_INGEST_KEY` (API key you'll create in your LogDNA console) and the `LOGDNA_INGEST_URL` (should be https://logs.logdna.com/logs/ingest) via your System properties or environment variables. If you don't provide an API key, the appender will be automatically disabled (with a warning).
     
 == Configuration options
 

@@ -49,6 +49,8 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
 
     private Client client;
 
+    private boolean disabled;
+
     protected final MultivaluedMap<String, Object> headers;
 
     // Assignable fields
@@ -121,7 +123,17 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
     @Override
     protected void append(ILoggingEvent event) {
 
+        if (disabled) {
+            return;
+        }
+
         if (event.getLoggerName().equals(LogDnaAppender.class.getName())) {
+            return;
+        }
+
+        if (!this.headers.containsKey("apikey") || this.headers.getFirst("apikey").toString().isBlank()) {
+            errorLog.warn("Empty ingest API key for LogDNA ; disabling LogDnaAppender");
+            this.disabled = true;
             return;
         }
 
@@ -329,4 +341,7 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
         this.readTimeout = readTimeout;
     }
 
+    public boolean isDisabled() {
+        return this.disabled;
+    }
 }
