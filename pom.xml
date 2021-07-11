@@ -5,7 +5,7 @@
     <artifactId>logback-logdna</artifactId>
     <packaging>jar</packaging>
     <groupId>net.zileo</groupId>
-    <version>1.1.3-SNAPSHOT</version>
+    <version>1.2.0-SNAPSHOT</version>
 
     <name>${project.groupId}:${project.artifactId}</name>
     <description>Logback appender for sending logs to LogDNA.com</description>
