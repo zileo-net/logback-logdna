@@ -52,12 +52,13 @@ public class LogDnaAppenderIntegrationTest {
         this.logger.detachAppender(appender);
     }
 
-    @Test
-    public void testNoCredentials() {
-        this.appender.headers.remove("apikey");
-        this.logger.error("I am no Groot");
-        hasError("Missing Credentials", 401);
-    }
+    // Not anymore an error : appender is automatically disabled
+    //    @Test
+    //    public void testNoCredentials() {
+    //        this.appender.headers.remove("apikey");
+    //        this.logger.error("I am no Groot");
+    //        hasError("Missing Credentials", 401);
+    //    }
 
     @Test
     public void testInfoLog() {
