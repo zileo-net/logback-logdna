@@ -36,7 +36,7 @@ public class LogDnaAppenderTest {
         Logger logger = new LoggerContext().getLogger(Logger.ROOT_LOGGER_NAME);
         ILoggingEvent ev = new LoggingEvent(Logger.FQCN, logger, Level.INFO, "My log message", null, new Object[] {});
 
-        // Self instanciated appender
+        // Self instantiated appender
         LogDnaAppender appender = new LogDnaAppender();
         appender.setAppName("LogDnaTest");
         appender.setMdcFields("field1,field3,field4,field5");
@@ -57,6 +57,11 @@ public class LogDnaAppenderTest {
         assertEquals(1, ((Collection) postData.get("lines")).size());
 
         Map<String, Object> event = (Map<String, Object>) ((Collection) postData.get("lines")).iterator().next();
+        assertEventData(ev, event);
+    }
+
+    @SuppressWarnings("unchecked")
+    private void assertEventData(ILoggingEvent ev, Map<String, Object> event) {
         assertNotNull(event);
         assertNotNull(event.get("timestamp"));
         assertNotNull(event.get("level"));
