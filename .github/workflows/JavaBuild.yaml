@@ -8,8 +8,6 @@ on:
       - opened
       - synchronize
       - reopened
-   schedule:
-   -  cron: 0 2 * * 0
 jobs:
    build:
       runs-on: ubuntu-latest
