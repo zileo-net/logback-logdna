@@ -98,7 +98,8 @@ public class LogDnaAppenderIntegrationTest {
         assertTrue(appender.hasException());
         assertTrue(ProcessingException.class.isInstance(appender.getException()));
         assertNotNull(appender.getException().getCause());
-        assertEquals("Connect timed out", appender.getException().getCause().getMessage());
+        assertNotNull(appender.getException().getCause().getMessage());
+        assertEquals("connect timed out", appender.getException().getCause().getMessage().toLowerCase());
     }
 
     @Test
