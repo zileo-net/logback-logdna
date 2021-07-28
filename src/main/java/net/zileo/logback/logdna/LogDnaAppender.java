@@ -151,7 +151,7 @@ public class LogDnaAppender extends UnsynchronizedAppenderBase<ILoggingEvent> {
             errorLog.error("Error processing JSON data : {}", e.getMessage());
 
         } catch (Exception e) {
-            errorLog.error("Error calling LogDna : {}", e.getMessage());
+            errorLog.error("Error trying to call LogDna : {}", e.getMessage());
         }
 
     }
