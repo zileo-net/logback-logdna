@@ -20,7 +20,7 @@ jobs:
             gpg-key: ${{secrets.RELEASE_GPG_KEY}}
             git-release-bot-name: ${{secrets.RELEASE_USER_NAME}}
             git-release-bot-email: ${{secrets.RELEASE_USER_EMAIL}}
-            access-token: ${{secrets.RELEASE_GITHUB_TOKEN}}
+            access-token: ${{secrets.GITHUB_TOKEN}}
             maven-repo-server-id: ossrh
             maven-repo-server-username: ${{secrets.OSSRH_USERNAME}}
             maven-repo-server-password: ${{secrets.OSSRH_PASSWORD}}
@@ -32,4 +32,4 @@ jobs:
             target_branch: gh-pages
             build_dir: target/generated-docs
          env:
-            GITHUB_TOKEN: ${{ secrets.RELEASE_GITHUB_TOKEN }}
+            GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
