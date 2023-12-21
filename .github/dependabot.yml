@@ -9,10 +9,10 @@ updates:
   ignore:
   - dependency-name: org.glassfish.jersey.inject:jersey-hk2
     versions:
-    - 3.x
+    - ">=3.0.0"
   - dependency-name: org.glassfish.jersey.core:jersey-common
     versions:
-    - 3.x
+    - ">=3.0.0"
   - dependency-name: org.glassfish.jersey.core:jersey-client
     versions:
-    - 3.x
+    - ">=3.0.0"
