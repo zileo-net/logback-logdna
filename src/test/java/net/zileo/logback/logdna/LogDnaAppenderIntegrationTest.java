@@ -5,6 +5,8 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
+import java.util.concurrent.TimeUnit;
+
 import javax.ws.rs.ProcessingException;
 
 import org.junit.After;
@@ -129,6 +131,16 @@ public class LogDnaAppenderIntegrationTest {
             appender.getException().printStackTrace();
         }
         assertTrue(appender.isOK());
+    }
+
+    @Test
+    public void testSeveralLogs() {
+        for (int i = 1; i <= 30; i++) {
+            this.logger.info("I am Groot {}", i);
+            if (!appender.isOK() && appender.hasError()) {
+                System.out.println(appender.getLogDnaResponse().getStatus() + " - " + appender.getLogDnaResponse().getError());
+            }
+        }
     }
 
 }

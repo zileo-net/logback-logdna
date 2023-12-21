@@ -20,6 +20,8 @@ First, copy this dependency into your `pom.xml` file.
 </dependency>
 ----
 
+Version 1.3.0 or greater requires Java 11 or greater.
+
 If you don't already have one in your project, add a JAX-RS implementation into your `pom.xml`, like https://search.maven.org/artifact/org.glassfish.jersey.core/jersey-client[Jersey] (the one used in the unit tests), https://search.maven.org/artifact/org.jboss.resteasy/resteasy-client[RESTEasy] or https://search.maven.org/artifact/org.apache.cxf/cxf-rt-rs-client[Apache CXF].
 
 Then, copy the following two LogDna appenders to your `classpath:/logback.xml` file. Check the next chapter for a description of each configuration option.
