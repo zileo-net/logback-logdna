@@ -9,7 +9,8 @@ jobs:
       -  name: Set up JDK with Maven Central Repository
          uses: actions/setup-java@v2
          with:
-            java-version: 8
+            java-version: 11
+            distribution: adopt
       -  name: Release & Deploy
          uses: qcastel/github-actions-maven-release@v1.11.2
          with:
