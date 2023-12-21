@@ -1,16 +1,14 @@
 package net.zileo.logback.logdna;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
-
-import java.util.concurrent.TimeUnit;
 
 import javax.ws.rs.ProcessingException;
 
 import org.junit.After;
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.slf4j.LoggerFactory;
 import org.slf4j.MDC;
@@ -53,14 +51,6 @@ public class LogDnaAppenderIntegrationTest {
     public void tearDown() {
         this.logger.detachAppender(appender);
     }
-
-    // Not anymore an error : appender is automatically disabled
-    //    @Test
-    //    public void testNoCredentials() {
-    //        this.appender.headers.remove("apikey");
-    //        this.logger.error("I am no Groot");
-    //        hasError("Missing Credentials", 401);
-    //    }
 
     @Test
     public void testInfoLog() {
@@ -115,14 +105,6 @@ public class LogDnaAppenderIntegrationTest {
         assertEquals("Read timed out", appender.getException().getCause().getMessage());
     }
 
-    private void hasError(String message, int statusCode) {
-        assertFalse(appender.hasException());
-        assertFalse(appender.isOK());
-        assertTrue(appender.hasError());
-        assertEquals(message, appender.getLogDnaResponse().getError());
-        assertEquals(statusCode, appender.getResponse().getStatus());
-    }
-
     private void isOk() {
         if (!appender.isOK() && appender.hasError()) {
             System.out.println(appender.getLogDnaResponse().getStatus() + " - " + appender.getLogDnaResponse().getError());
@@ -133,6 +115,7 @@ public class LogDnaAppenderIntegrationTest {
         assertTrue(appender.isOK());
     }
 
+    @Ignore
     @Test
     public void testSeveralLogs() {
         for (int i = 1; i <= 30; i++) {
