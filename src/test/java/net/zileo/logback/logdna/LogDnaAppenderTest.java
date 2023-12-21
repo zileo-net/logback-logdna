@@ -36,6 +36,9 @@ public class LogDnaAppenderTest {
         Logger logger = new LoggerContext().getLogger(Logger.ROOT_LOGGER_NAME);
         ILoggingEvent ev = new LoggingEvent(Logger.FQCN, logger, Level.INFO, "My log message", null, new Object[] {});
 
+        // Needed from LogBack 1.4.8 - https://github.com/spring-projects/spring-boot/issues/36177
+        logger.getLoggerContext().setMDCAdapter(MDC.getMDCAdapter());
+
         // Self instantiated appender
         LogDnaAppender appender = new LogDnaAppender();
         appender.setAppName("LogDnaTest");
