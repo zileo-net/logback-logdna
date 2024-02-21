@@ -27,12 +27,12 @@
 		</developer>
 	</developers>
 
-	<scm>
-		<connection>scm:git:https://github.com/zileo-net/logback-logdna.git</connection>
-		<developerConnection>scm:git:https://github.com/zileo-net/logback-logdna.git</developerConnection>
-		<url>https://github.com/zileo-net/logback-logdna</url>
-		<tag>HEAD</tag>
-	</scm>
+    <scm>
+        <connection>scm:git:${project.scm.url}</connection>
+        <developerConnection>scm:git:${project.scm.url}</developerConnection>
+        <url>https://github.com/zileo-net/logback-logdna.git</url>
+        <tag>HEAD</tag>
+    </scm>
 
 	<properties>
 		<java.version>17</java.version>
@@ -184,6 +184,7 @@
 						<artifactId>maven-release-plugin</artifactId>
 						<version>3.0.1</version>
 						<configuration>
+						    <scmCommentPrefix>[ci skip]</scmCommentPrefix>
 							<autoVersionSubmodules>true</autoVersionSubmodules>
 							<useReleaseProfile>false</useReleaseProfile>
 							<releaseProfiles>release</releaseProfiles>

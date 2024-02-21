@@ -12,21 +12,21 @@ jobs:
             java-version: 17
             distribution: adopt
       -  name: Release & Deploy
-         uses: qcastel/github-actions-maven-release@v1.12.12
+         uses: qcastel/github-actions-maven-release@v1.12.31
          env:
             JAVA_HOME: /usr/lib/jvm/java-17-openjdk/
          with:
             release-branch-name: master
             gpg-enabled: true
-            gpg-key-id: ${{secrets.RELEASE_GPG_KEY_ID}}
-            gpg-key: ${{secrets.RELEASE_GPG_KEY}}
-            git-release-bot-name: ${{secrets.RELEASE_USER_NAME}}
-            git-release-bot-email: ${{secrets.RELEASE_USER_EMAIL}}
+            gpg-key-id: ${{ secrets.RELEASE_GPG_KEY_ID }}
+            gpg-key: ${{ secrets.RELEASE_GPG_KEY }}
+            git-release-bot-name: ${{ secrets.RELEASE_USER_NAME }}
+            git-release-bot-email: ${{ secrets.RELEASE_USER_EMAIL }}
             access-token: ${{secrets.GITHUB_TOKEN}}
             maven-repo-server-id: ossrh
-            maven-repo-server-username: ${{secrets.OSSRH_USERNAME}}
-            maven-repo-server-password: ${{secrets.OSSRH_PASSWORD}}
-            maven-args: -Prelease -DskipTests -Dgpg.keyname=${{secrets.RELEASE_GPG_KEY_ID}} -Dgpg.passphrase=
+            maven-repo-server-username: ${{ secrets.OSSRH_USERNAME }}
+            maven-repo-server-password: ${{ secrets.OSSRH_PASSWORD }}
+            maven-args: -Prelease -DskipTests -Dgpg.keyname=${{ secrets.RELEASE_GPG_KEY_ID }} -Dgpg.passphrase=
       -  name: Deploy to GitHub Pages
          if: success()
          uses: crazy-max/ghaction-github-pages@v4
