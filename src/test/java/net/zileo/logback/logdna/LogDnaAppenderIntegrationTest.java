@@ -4,8 +4,6 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
-import jakarta.ws.rs.ProcessingException;
-
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -17,6 +15,7 @@ import ch.qos.logback.classic.Logger;
 import ch.qos.logback.classic.LoggerContext;
 import ch.qos.logback.classic.joran.JoranConfigurator;
 import ch.qos.logback.core.joran.spi.JoranException;
+import jakarta.ws.rs.ProcessingException;
 
 /**
  * ! One LOGDNA_INGEST_KEY must be set as an environment variable before launching the test !
@@ -86,7 +85,7 @@ public class LogDnaAppenderIntegrationTest {
 
     @Test
     public void testConnectTimeout() {
-        this.appender.setConnectTimeout(2L);
+        this.appender.setConnectTimeout(0L);
         this.logger.error("I am no Groot");
         assertTrue(appender.hasException());
         assertTrue(ProcessingException.class.isInstance(appender.getException()));
@@ -97,7 +96,7 @@ public class LogDnaAppenderIntegrationTest {
 
     @Test
     public void testReadTimeout() {
-        this.appender.setReadTimeout(2L);
+        this.appender.setReadTimeout(0L);
         this.logger.error("I am no Groot");
         assertTrue(appender.hasException());
         assertTrue(ProcessingException.class.isInstance(appender.getException()));
