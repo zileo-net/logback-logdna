@@ -9,3 +9,4 @@ bin
 .idea
 *~
 /src/test/resources/logback-test.xml
+.java-version

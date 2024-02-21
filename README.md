@@ -8,7 +8,7 @@ You'll find all the details about the library in [the published GitHub pages man
 
 # 2.x.x Upgrade
 
-Version 2 of this library upgrades to `jakarta.ws` packages instead of `javax.ws` packages. 
+Version 2 of this library upgrades to Java 17 to `jakarta.ws` packages instead of `javax.ws` packages. 
 
 ---
 
