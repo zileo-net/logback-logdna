@@ -12,7 +12,7 @@ jobs:
             java-version: 17
             distribution: adopt
       -  name: Release & Deploy
-         uses: qcastel/github-actions-maven-release@v1.11.2
+         uses: qcastel/github-actions-maven-release@v1.12.12
          env:
             JAVA_HOME: /usr/lib/jvm/java-17-openjdk/
          with:
