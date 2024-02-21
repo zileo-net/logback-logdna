@@ -208,8 +208,8 @@
 						<artifactId>maven-javadoc-plugin</artifactId>
 						<version>3.6.3</version>
 						<configuration>
-							<source>8</source>
-							<additionalparam>-Xdoclint:none</additionalparam>
+							<source>17</source>
+							<doclint>all,-missing</doclint>
 							<linksource>true</linksource>
 							<detectJavaApiLink>true</detectJavaApiLink>
 						</configuration>
