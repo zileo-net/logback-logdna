@@ -5,7 +5,7 @@ ifndef::sourcedir[:sourcedir: ../../test/resources]
 
 This library provides an appender for https://logback.qos.ch[logback], allowing you to send logs to the https://logdna.com[LogDNA] online logging platform, via their HTTPS Ingest API. MDC thread-bound data can be send, indexed and searched into your LogDNA dashboard.
 
-This library relies on a JAX-RS v2 implementation (of your choice) with a Jackson JSON mapper. For a lightweight implementation, you can check https://github.com/robshep/logback-logdna[this other appender].
+This library relies on a JAX-RS v2.1 implementation (of your choice) with a Jackson JSON mapper. For a lightweight implementation, you can check https://github.com/robshep/logback-logdna[this other appender].
 
 == How to use it
 

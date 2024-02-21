@@ -6,6 +6,10 @@ This library provides an appender for [logback](https://logback.qos.ch), allowin
 
 You'll find all the details about the library in [the published GitHub pages manual](https://zileo-net.github.io/logback-logdna/).
 
+# 2.x.x Upgrade
+
+Version 2 of this library upgrades to `jakarta.ws` packages instead of `javax.ws` packages. 
+
 ---
 
 Proudly provided by [Zileo.net](https://zileo.net)
