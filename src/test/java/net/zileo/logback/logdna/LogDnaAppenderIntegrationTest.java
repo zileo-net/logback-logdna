@@ -85,7 +85,7 @@ public class LogDnaAppenderIntegrationTest {
 
     @Test
     public void testConnectTimeout() {
-        this.appender.setConnectTimeout(0L);
+        this.appender.setConnectTimeout(1L);
         this.logger.error("I am no Groot");
         assertTrue(appender.hasException());
         assertTrue(ProcessingException.class.isInstance(appender.getException()));
@@ -96,7 +96,7 @@ public class LogDnaAppenderIntegrationTest {
 
     @Test
     public void testReadTimeout() {
-        this.appender.setReadTimeout(0L);
+        this.appender.setReadTimeout(1L);
         this.logger.error("I am no Groot");
         assertTrue(appender.hasException());
         assertTrue(ProcessingException.class.isInstance(appender.getException()));
